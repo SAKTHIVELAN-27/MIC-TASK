@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ORGANIZER
+  ATTENDEE
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  COMPLETED
+}
+
+enum TokenStatus {
+  ACTIVE
+  USED
+  REVOKED
+}
+
+enum SyncStatus {
+  PENDING
+  SYNCED
+  CONFLICT
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          Role           @default(ATTENDEE)
+  avatar        String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
+  events        Event[]        @relation("OrganizerEvents")
+  stations      ScannerStation[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Event {
+  id           String         @id @default(cuid())
+  name         String
+  description  String
+  date         DateTime
+  startTime    String
+  endTime      String
+  venue        String
+  capacity     Int
+  status       EventStatus    @default(PUBLISHED)
+  organizerId  String
+  organizer    User           @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+  stations     ScannerStation[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([organizerId])
+  @@index([status])
+  @@map("events")
+}
+
+model Registration {
+  id               String    @id @default(cuid())
+  userId           String
+  eventId          String
+  registrationCode String    @unique @default(cuid())
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event            Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  qrToken          QRToken?
+  checkIn          CheckIn?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+  @@map("registrations")
+}
+
+model QRToken {
+  id             String        @id @default(cuid())
+  token          String        @unique
+  status         TokenStatus   @default(ACTIVE)
+  registrationId String        @unique
+  registration   Registration  @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  usedAt         DateTime?
+  createdAt      DateTime      @default(now())
+
+  @@index([token])
+  @@map("qr_tokens")
+}
+
+model CheckIn {
+  id             String         @id @default(cuid())
+  registrationId String         @unique
+  registration   Registration   @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  stationId      String?
+  station        ScannerStation? @relation(fields: [stationId], references: [id])
+  checkedInAt    DateTime       @default(now())
+  createdAt      DateTime       @default(now())
+
+  @@index([registrationId])
+  @@index([checkedInAt])
+  @@map("check_ins")
+}
+
+model ScannerStation {
+  id          String    @id @default(cuid())
+  name        String
+  eventId     String
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  organizerId String
+  organizer   User      @relation(fields: [organizerId], references: [id])
+  checkIns    CheckIn[]
+  createdAt   DateTime  @default(now())
+
+  @@index([eventId])
+  @@map("scanner_stations")
+}
+
+model OfflineSyncLog {
+  id              String     @id @default(cuid())
+  token           String
+  scannedAt       DateTime
+  syncedAt        DateTime?
+  deviceId        String?
+  localScanId     String?
+  status          SyncStatus @default(PENDING)
+  conflictReason  String?
+  conflictStation String?
+  conflictTime    DateTime?
+  createdAt       DateTime   @default(now())
+
+  @@index([token])
+  @@index([status])
+  @@map("offline_sync_logs")
+}
