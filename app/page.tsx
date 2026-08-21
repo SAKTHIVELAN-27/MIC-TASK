@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Zap, QrCode, Shield, Wifi, WifiOff, BarChart3, CheckCircle, ArrowRight, Users, Calendar, Activity, Brain, Lock, Database, Radio } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Navbar } from '@/components/layout/navbar';
 
 function AnimatedNumber({ target, duration = 2000 }: { target: number; duration?: number }) {
   const [value, setValue] = useState(0);
@@ -73,28 +74,7 @@ export default function LandingPage() {
       <div className="fixed inset-0 glow-bg-green pointer-events-none" />
 
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-cyan-400" />
-            </div>
-            <span className="font-bold text-white">EventSync</span>
-            <span className="tech-label ml-2 hidden sm:block">Infrastructure</span>
-          </div>
-          <div className="hidden md:flex items-center gap-6">
-            {['Events', 'Dashboard', 'Scanner', 'Analytics'].map((item) => (
-              <Link key={item} href={`/${item.toLowerCase()}`} className="text-sm text-gray-400 hover:text-cyan-400 transition-colors">{item}</Link>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors px-3 py-1.5">Sign In</Link>
-            <Link href="/register" className="text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-1.5 rounded-lg transition-colors">
-              Get Started
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="relative pt-32 pb-24 px-6">

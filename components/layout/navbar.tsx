@@ -25,7 +25,11 @@ export function Navbar() {
     { href: '/my-events', icon: User, label: 'My Events' },
   ];
 
-  const links = role === 'ORGANIZER' ? organizerLinks : attendeeLinks;
+  const publicLinks = [
+    { href: '/events', icon: Calendar, label: 'Events' },
+  ];
+
+  const links = session ? (role === 'ORGANIZER' ? organizerLinks : attendeeLinks) : publicLinks;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5 h-16">
@@ -39,22 +43,20 @@ export function Navbar() {
         </Link>
 
         {/* Desktop links */}
-        {session && (
-          <div className="hidden md:flex items-center gap-1">
-            {links.map((link) => {
-              const active = pathname.startsWith(link.href);
-              return (
-                <Link key={link.href} href={link.href}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all ${
-                    active ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'
-                  }`}>
-                  <link.icon className="w-3.5 h-3.5" />
-                  {link.label}
-                </Link>
-              );
-            })}
-          </div>
-        )}
+        <div className="hidden md:flex items-center gap-1">
+          {links.map((link) => {
+            const active = pathname.startsWith(link.href);
+            return (
+              <Link key={link.href} href={link.href}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all ${
+                  active ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}>
+                <link.icon className="w-3.5 h-3.5" />
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
 
         {/* Right side */}
         <div className="flex items-center gap-2">
