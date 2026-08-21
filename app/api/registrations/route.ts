@@ -20,8 +20,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const userId = session?.user?.id;
+    if (!userId) {
+      return NextResponse.json({ success: false, code: 'UNAUTHORIZED', message: 'User ID missing' }, { status: 401 });
+    }
+
     const token = generateSecureToken();
-    const result = await registerForEvent(session!.user!.id!, parsed.data.eventId, token);
+    const result = await registerForEvent(userId, parsed.data.eventId, token);
 
     if (!result.success) {
       return NextResponse.json(
@@ -43,10 +48,15 @@ export async function GET(req: NextRequest) {
 
   try {
     const { prisma } = await import('@/lib/db');
+    const userId = session?.user?.id;
+    if (!userId) {
+      return NextResponse.json({ success: false, code: 'UNAUTHORIZED', message: 'User ID missing' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const eventId = searchParams.get('eventId');
 
-    const where: any = { userId: session!.user!.id };
+    const where: any = { userId };
     if (eventId) where.eventId = eventId;
 
     const registrations = await prisma.registration.findMany({

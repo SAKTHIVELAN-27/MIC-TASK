@@ -70,6 +70,11 @@ export async function POST(req: NextRequest) {
 
     const { name, description, date, startTime, endTime, venue, capacity } = parsed.data;
 
+    const organizerId = session?.user?.id;
+    if (!organizerId) {
+      return NextResponse.json({ success: false, code: 'UNAUTHORIZED', message: 'User ID missing' }, { status: 401 });
+    }
+
     const event = await prisma.event.create({
       data: {
         name,
@@ -79,7 +84,7 @@ export async function POST(req: NextRequest) {
         endTime,
         venue,
         capacity,
-        organizerId: session!.user!.id,
+        organizerId,
         status: 'PUBLISHED',
       },
     });
@@ -89,7 +94,7 @@ export async function POST(req: NextRequest) {
       data: {
         name: 'Main Entrance',
         eventId: event.id,
-        organizerId: session!.user!.id,
+        organizerId,
       },
     });
 
