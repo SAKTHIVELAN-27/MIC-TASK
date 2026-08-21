@@ -27,6 +27,9 @@ export function Navbar() {
 
   const publicLinks = [
     { href: '/events', icon: Calendar, label: 'Events' },
+    { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/scanner', icon: QrCode, label: 'Scanner' },
+    { href: '/analytics', icon: BarChart3, label: 'Analytics' },
   ];
 
   const links = session ? (role === 'ORGANIZER' ? organizerLinks : attendeeLinks) : publicLinks;
