@@ -37,10 +37,10 @@ export default async function AnalyticsPage({ params }: { params: Promise<{ even
           </div>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <StatCard label="Registered" value={stats?.registeredCount ?? 0} icon={Users} color="cyan" />
-          <StatCard label="Checked In" value={stats?.checkedInCount ?? 0} icon={CheckCircle} color="green" />
-          <StatCard label="No-Shows" value={stats?.noShowCount ?? 0} icon={UserX} color="yellow" />
-          <StatCard label="Check-In Rate" value={`${stats?.checkInRate ?? 0}%`} icon={TrendingUp} color="cyan" />
+          <StatCard label="Registered" value={stats?.registeredCount ?? 0} icon="users" color="cyan" />
+          <StatCard label="Checked In" value={stats?.checkedInCount ?? 0} icon="check-circle" color="green" />
+          <StatCard label="No-Shows" value={stats?.noShowCount ?? 0} icon="user-x" color="yellow" />
+          <StatCard label="Check-In Rate" value={`${stats?.checkInRate ?? 0}%`} icon="trending-up" color="cyan" />
         </div>
         <div className="mb-6"><CapacityBar registered={stats?.registeredCount ?? 0} checkedIn={stats?.checkedInCount ?? 0} capacity={event.capacity} /></div>
         <AttendanceChart data={stats?.chartData ?? []} />

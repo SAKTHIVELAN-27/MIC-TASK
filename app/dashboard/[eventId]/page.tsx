@@ -79,10 +79,10 @@ export default async function EventDashboardPage({ params }: { params: Promise<{
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <StatCard label="Registered" value={stats?.registeredCount ?? 0} icon={Users} color="cyan" />
-          <StatCard label="Checked In" value={stats?.checkedInCount ?? 0} icon={CheckCircle} color="green" />
-          <StatCard label="No-Shows" value={stats?.noShowCount ?? 0} icon={UserX} color="yellow" />
-          <StatCard label="Remaining" value={stats?.remainingCapacity ?? 0} icon={Users} color="cyan" sublabel={`of ${event.capacity} capacity`} />
+          <StatCard label="Registered" value={stats?.registeredCount ?? 0} icon="users" color="cyan" />
+          <StatCard label="Checked In" value={stats?.checkedInCount ?? 0} icon="check-circle" color="green" />
+          <StatCard label="No-Shows" value={stats?.noShowCount ?? 0} icon="user-x" color="yellow" />
+          <StatCard label="Remaining" value={stats?.remainingCapacity ?? 0} icon="users" color="cyan" sublabel={`of ${event.capacity} capacity`} />
         </div>
 
         <div className="mb-6">

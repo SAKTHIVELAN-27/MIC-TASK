@@ -1,11 +1,22 @@
 'use client';
 import { motion } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, Users, CheckCircle, UserX, TrendingUp, Calendar, Clock, MapPin, QrCode } from 'lucide-react';
+
+const iconMap: Record<string, LucideIcon> = {
+  users: Users,
+  'check-circle': CheckCircle,
+  'user-x': UserX,
+  'trending-up': TrendingUp,
+  calendar: Calendar,
+  clock: Clock,
+  mappin: MapPin,
+  qrcode: QrCode,
+};
 
 interface StatCardProps {
   label: string;
   value: number | string;
-  icon: LucideIcon;
+  icon: LucideIcon | string;
   color?: 'cyan' | 'green' | 'yellow' | 'red';
   sublabel?: string;
 }
@@ -17,8 +28,10 @@ const colorMap = {
   red: { bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'text-red-400', val: 'text-red-300' },
 };
 
-export function StatCard({ label, value, icon: Icon, color = 'cyan', sublabel }: StatCardProps) {
+export function StatCard({ label, value, icon, color = 'cyan', sublabel }: StatCardProps) {
   const c = colorMap[color];
+  const Icon = typeof icon === 'string' ? (iconMap[icon.toLowerCase()] || Users) : icon;
+
   return (
     <motion.div whileHover={{ scale: 1.02 }} className="glass rounded-xl border border-white/8 p-5 hover:border-cyan-500/15 transition-colors">
       <div className="flex items-start justify-between mb-4">
