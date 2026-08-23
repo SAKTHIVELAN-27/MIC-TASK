@@ -47,11 +47,9 @@ export default function RegisterPage() {
       }
       // Auto sign-in
       await signIn('credentials', { email: data.email, password: data.password, redirect: false });
-      router.push(data.role === 'ORGANIZER' ? '/dashboard' : '/my-events');
-      router.refresh();
+      window.location.href = data.role === 'ORGANIZER' ? '/dashboard' : '/my-events';
     } catch {
       setError('Something went wrong. Please try again.');
-    } finally {
       setLoading(false);
     }
   };

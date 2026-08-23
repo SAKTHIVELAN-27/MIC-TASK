@@ -26,33 +26,32 @@ export default function LoginPage() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const handleLogin = async (emailStr: string, passwordStr: string) => {
     setLoading(true);
     setError('');
     try {
       const result = await signIn('credentials', {
-        email: data.email,
-        password: data.password,
+        email: emailStr,
+        password: passwordStr,
         redirect: false,
       });
       if (result?.error) {
         setError('Invalid email or password');
+        setLoading(false);
       } else {
-        // Fetch session to determine role-based redirect
         const res = await fetch('/api/auth/session');
         const session = await res.json();
-        if (session?.user?.role === 'ORGANIZER') {
-          router.push('/dashboard');
-        } else {
-          router.push('/my-events');
-        }
-        router.refresh();
+        const target = session?.user?.role === 'ORGANIZER' ? '/dashboard' : '/my-events';
+        window.location.href = target;
       }
     } catch {
       setError('Something went wrong. Please try again.');
-    } finally {
       setLoading(false);
     }
+  };
+
+  const onSubmit = async (data: FormData) => {
+    await handleLogin(data.email, data.password);
   };
 
   return (
@@ -140,22 +139,36 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-white/5 text-center">
+          {/* 1-Click Demo Login Buttons */}
+          <div className="mt-6 pt-6 border-t border-white/5 space-y-3">
+            <p className="tech-label text-center mb-2">Instant 1-Click Demo Login</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                disabled={loading}
+                onClick={() => handleLogin('organizer@demo.com', 'password123')}
+                className="bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
+              >
+                Organizer Demo
+              </button>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={() => handleLogin('attendee1@demo.com', 'password123')}
+                className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5"
+              >
+                Attendee Demo
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-6 text-center">
             <p className="text-gray-500 text-sm">
               Don&apos;t have an account?{' '}
               <Link href="/register" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
                 Create one
               </Link>
             </p>
-          </div>
-
-          {/* Demo credentials */}
-          <div className="mt-4 bg-cyan-500/5 border border-cyan-500/10 rounded-lg p-3">
-            <p className="tech-label text-center mb-2">Demo Credentials</p>
-            <div className="space-y-1 text-xs text-gray-400 font-mono">
-              <p>Organizer: organizer@demo.com / password123</p>
-              <p>Attendee: attendee1@demo.com / password123</p>
-            </div>
           </div>
         </div>
       </motion.div>
