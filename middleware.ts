@@ -11,7 +11,7 @@ export default auth((req) => {
   const path = nextUrl.pathname;
 
   // Public paths
-  const publicPaths = ['/', '/login', '/register', '/check-in', '/events'];
+  const publicPaths = ['/', '/login', '/register', '/signin', '/sign-in', '/check-in', '/events'];
   const isPublic = publicPaths.some((p) => path === p || path.startsWith(p + '/'));
 
   if (!isLoggedIn && !isPublic) {
@@ -35,7 +35,7 @@ export default auth((req) => {
     }
 
     // Redirect logged-in users away from auth pages
-    if (path === '/login' || path === '/register') {
+    if (path === '/login' || path === '/register' || path === '/signin' || path === '/sign-in') {
       return NextResponse.redirect(new URL(role === 'ORGANIZER' ? '/dashboard' : '/my-events', nextUrl));
     }
   }
