@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { Navbar } from '@/components/layout/navbar';
 import Link from 'next/link';
-import { ArrowRight, Plus, Calendar, Users, CheckCircle, Zap } from 'lucide-react';
+import { ArrowRight, Plus, Calendar, Users, CheckCircle, Zap, QrCode, BarChart3, Brain, Download } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -35,15 +35,26 @@ export default async function DashboardPage() {
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 pt-24 pb-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <div className="tech-label mb-1">Organizer Dashboard</div>
             <h1 className="text-3xl font-black text-white">Command Center</h1>
-            <p className="text-gray-400 text-sm mt-1">Welcome, <span className="text-cyan-400">{session.user.name}</span></p>
+            <p className="text-gray-400 text-sm mt-1">Welcome back, <span className="text-cyan-400 font-semibold">{session.user.name}</span></p>
           </div>
-          <Link href="/dashboard/create" className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-2 rounded-xl transition-colors">
-            <Plus className="w-4 h-4" /> New Event
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/dashboard/create" className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-4 py-2 rounded-xl transition-colors text-sm shadow-lg shadow-cyan-500/20">
+              <Plus className="w-4 h-4" /> New Event
+            </Link>
+            <Link href="/scanner" className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-3.5 py-2 rounded-xl transition-colors text-sm">
+              <QrCode className="w-4 h-4 text-cyan-400" /> Scanner
+            </Link>
+            <Link href="/analytics" className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-3.5 py-2 rounded-xl transition-colors text-sm">
+              <BarChart3 className="w-4 h-4 text-cyan-400" /> Analytics
+            </Link>
+            <Link href="/ai-insights" className="flex items-center gap-2 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 px-3.5 py-2 rounded-xl transition-colors text-sm">
+              <Brain className="w-4 h-4" /> AI Insights
+            </Link>
+          </div>
         </div>
 
         {/* Overview stats */}
@@ -77,7 +88,7 @@ export default async function DashboardPage() {
             {eventsWithStats.map((event) => {
               const pct = Math.min((event._count.registrations / event.capacity) * 100, 100);
               return (
-                <div key={event.id} className="glass rounded-2xl border border-white/8 hover:border-cyan-500/20 transition-all overflow-hidden">
+                <div key={event.id} className="glass rounded-2xl border border-white/8 hover:border-cyan-500/20 transition-all overflow-hidden flex flex-col justify-between">
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
@@ -87,7 +98,7 @@ export default async function DashboardPage() {
                             <span className="text-green-400 text-[10px] font-mono">LIVE</span>
                           </div>
                         )}
-                        <h3 className="text-white font-bold truncate">{event.name}</h3>
+                        <h3 className="text-white font-bold truncate text-lg">{event.name}</h3>
                         <p className="text-gray-500 text-xs mt-0.5">{formatDate(event.date)} · {event.venue}</p>
                       </div>
                     </div>
@@ -109,13 +120,28 @@ export default async function DashboardPage() {
                     <div className="text-gray-500 text-[10px] font-mono text-right">{pct.toFixed(0)}% capacity</div>
                   </div>
 
-                  <div className="px-5 pb-5 flex gap-2">
-                    <Link href={`/dashboard/${event.id}`} className="flex-1 flex items-center justify-between bg-white/3 hover:bg-cyan-500/10 border border-white/5 hover:border-cyan-500/20 rounded-lg px-3 py-2 text-xs text-gray-300 hover:text-cyan-400 transition-all">
-                      Open Dashboard <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                    <Link href={`/scanner/${event.id}`} className="flex items-center gap-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-lg px-3 py-2 text-xs text-cyan-400 transition-all">
-                      Scanner
-                    </Link>
+                  {/* Organizer Quick Action Buttons */}
+                  <div className="px-5 pb-5 space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link href={`/dashboard/${event.id}`} className="flex items-center justify-center gap-1.5 bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-500/30 rounded-xl py-2 text-xs text-gray-200 hover:text-cyan-300 font-semibold transition-all">
+                        Dashboard <ArrowRight className="w-3 h-3" />
+                      </Link>
+                      <Link href={`/scanner/${event.id}`} className="flex items-center justify-center gap-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-xl py-2 text-xs text-cyan-400 font-semibold transition-all">
+                        <QrCode className="w-3.5 h-3.5" /> Scanner
+                      </Link>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <Link href={`/analytics/${event.id}`} className="flex items-center justify-center gap-1 bg-white/3 hover:bg-white/10 border border-white/5 rounded-lg py-1.5 text-[11px] text-gray-400 hover:text-white transition-all">
+                        <BarChart3 className="w-3 h-3 text-cyan-400" /> Stats
+                      </Link>
+                      <Link href={`/ai-insights/${event.id}`} className="flex items-center justify-center gap-1 bg-white/3 hover:bg-white/10 border border-white/5 rounded-lg py-1.5 text-[11px] text-gray-400 hover:text-white transition-all">
+                        <Brain className="w-3 h-3 text-cyan-400" /> AI
+                      </Link>
+                      <a href={`/api/export/${event.id}`} className="flex items-center justify-center gap-1 bg-white/3 hover:bg-white/10 border border-white/5 rounded-lg py-1.5 text-[11px] text-gray-400 hover:text-white transition-all">
+                        <Download className="w-3 h-3 text-cyan-400" /> CSV
+                      </a>
+                    </div>
                   </div>
                 </div>
               );
@@ -125,4 +151,5 @@ export default async function DashboardPage() {
       </main>
     </div>
   );
+}
 }

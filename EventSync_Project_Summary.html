@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventSync — Project Summary & Features Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+    
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #080d14;
+      color: #e2e8f0;
+      line-height: 1.6;
+      padding: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .badge {
+      display: inline-block;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #00d4ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    
+    .url-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 24px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+    
+    .url-box a {
+      color: #00ffed;
+      text-decoration: none;
+    }
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #00d4ff;
+      margin: 28px 0 14px 0;
+      border-left: 3px solid #00d4ff;
+      padding-left: 10px;
+    }
+    
+    p {
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 20px 0;
+    }
+    
+    .card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    
+    .card h3 {
+      font-size: 15px;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    
+    .card p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin: 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+    
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    
+    th {
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    td {
+      background: rgba(15, 23, 42, 0.4);
+      color: #cbd5e1;
+    }
+    
+    ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+    
+    li {
+      margin-bottom: 6px;
+    }
+    
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #00d4ff;
+      color: #080d14;
+      font-weight: 700;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    }
+    
+    @media print {
+      body {
+        background: #ffffff;
+        color: #0f172a;
+        padding: 0;
+      }
+      h1, .card h3 { color: #0f172a; }
+      p, li, td { color: #334155; }
+      .badge { background: #f1f5f9; color: #0284c7; border-color: #cbd5e1; }
+      .url-box { background: #f8fafc; border-color: #e2e8f0; color: #0f172a; }
+      .url-box a { color: #0284c7; }
+      .card { background: #f8fafc; border-color: #e2e8f0; }
+      th { background: #f1f5f9; color: #0284c7; border-color: #cbd5e1; }
+      td { background: #ffffff; border-color: #e2e8f0; }
+      h2 { color: #0284c7; border-color: #0284c7; }
+      .print-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">📥 Save / Print as PDF</button>
+
+  <div class="header">
+    <div class="badge">Production Report</div>
+    <h1>EventSync Platform</h1>
+    <div class="subtitle">Real-Time Campus Event Management & QR Check-In System</div>
+  </div>
+
+  <div class="url-box">
+    <strong>Live Deployment URL:</strong> <a href="https://mic-task.vercel.app" target="_blank">https://mic-task.vercel.app</a><br>
+    <strong>GitHub Repository:</strong> SAKTHIVELAN-27/MIC-TASK<br>
+    <strong>Deployment Platform:</strong> Vercel Serverless
+  </div>
+
+  <h2>1. Executive Summary & Project Description</h2>
+  <p>
+    <strong>EventSync</strong> is a production-grade event management and QR-based check-in platform engineered to solve high-concurrency event registration and entrance verification challenges. It guarantees zero over-registrations using atomic PostgreSQL transactions, generates high-contrast QR passes for instant optical scanning, provides an offline-first camera scanner, and delivers real-time attendance analytics powered by Google Gemini AI.
+  </p>
+
+  <h2>2. Core Features Built</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>🎟️ Event Management & Capacity Control</h3>
+      <p>Atomic PostgreSQL transactions with Serializable isolation guarantee strict capacity limits without race conditions under concurrent load.</p>
+    </div>
+    <div class="card">
+      <h3>📱 High-Contrast QR Passes</h3>
+      <p>Cryptographically unique 32-character tokens generated into standard black-on-white high-contrast QR pass images for instant camera scanning.</p>
+    </div>
+    <div class="card">
+      <h3>📷 Camera Scanner & Offline Sync</h3>
+      <p>Hardware-accelerated camera scanner with native BarcodeDetector support, dynamic viewfinder scaling, local offline scan queuing, and automatic background sync.</p>
+    </div>
+    <div class="card">
+      <h3>⚡ Check-In Verification Portal</h3>
+      <p>Public landing portal (/check-in/[token]) enabling 1-click arrival confirmation, verification badges, timestamp records, and scanner station selection.</p>
+    </div>
+    <div class="card">
+      <h3>📊 Real-Time Analytics & CSV Export</h3>
+      <p>Interactive attendance trend charts, peak check-in time calculations, no-show rate metrics, and 1-click CSV data exports.</p>
+    </div>
+    <div class="card">
+      <h3>🤖 Natural-Language AI Insights</h3>
+      <p>Integrated Google Gemini 1.5 Flash to process event stats and answer natural-language organizer questions grounded strictly in database facts.</p>
+    </div>
+  </div>
+
+  <h2>3. Technology Stack</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Technologies</th>
+        <th>Role & Architecture</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Frontend</td>
+        <td>Next.js 15 (App Router), React 19, Tailwind CSS, Framer Motion</td>
+        <td>Responsive dark-mode UI with sleek glassmorphism & micro-animations</td>
+      </tr>
+      <tr>
+        <td>Backend & Database</td>
+        <td>Next.js Serverless API Routes, PostgreSQL (Neon DB), Prisma ORM</td>
+        <td>Atomic transaction handling, relational schema, unique indexes</td>
+      </tr>
+      <tr>
+        <td>Authentication</td>
+        <td>Auth.js (NextAuth v5), bcryptjs</td>
+        <td>Role-based route protection (ORGANIZER vs ATTENDEE)</td>
+      </tr>
+      <tr>
+        <td>Real-Time & AI</td>
+        <td>Socket.IO, Google Gemini AI API</td>
+        <td>Live check-in feed broadcasts & AI analytics insights</td>
+      </tr>
+      <tr>
+        <td>Deployment</td>
+        <td>Vercel Serverless Hosting</td>
+        <td>Automated CI/CD deployment connected to main GitHub branch</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Applied Bug Fixes & Optimizations</h2>
+  <ul>
+    <li><strong>Capacity Race Condition Fix</strong>: Replaced raw SQL queries with Prisma Client transactions under Serializable isolation in <code>lib/capacity.ts</code>.</li>
+    <li><strong>Optical QR Scanner Fix</strong>: Changed QR pass rendering to standard high-contrast black-on-white with a white padded card container in <code>components/qr/qr-code-display.tsx</code>.</li>
+    <li><strong>RSC Serialization Fix</strong>: Replaced Lucide icon function props with serializable string names in <code>components/dashboard/stat-card.tsx</code>.</li>
+    <li><strong>Check-In Verification Route</strong>: Built <code>app/check-in/[token]/page.tsx</code> and <code>components/checkin/checkin-action-card.tsx</code> to resolve 404 page issues on scanned QR links.</li>
+    <li><strong>Vercel Build & Security Compliance</strong>: Updated <code>package.json</code> Next.js dependencies to non-vulnerable release versions and narrowed TypeScript <code>organizerId</code> types.</li>
+  </ul>
+
+</body>
+</html>
